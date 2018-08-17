@@ -1,11 +1,11 @@
 pragma solidity ^0.4.21;
 
-import "@gnosis.pm/util-contracts/contracts/Math.sol";
-import "@gnosis.pm/util-contracts/contracts/StandardToken.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "@gnosis.pm/util-contracts/contracts/Proxy.sol";
 
 contract TokenOWL is Proxied, StandardToken {
-    using Math for *;
+    using SafeMath for *;
 
     string public constant name = "OWL Token";
     string public constant symbol = "OWL";
@@ -91,7 +91,7 @@ contract TokenOWL is Proxied, StandardToken {
     {
         require(minter != 0 && msg.sender == minter);
         balances[to] = balances[to].add(amount);
-        totalTokens = totalTokens.add(amount);
+        totalSupply_ = totalSupply_.add(amount);
         emit Minted(to, amount);
     }
 
@@ -101,9 +101,9 @@ contract TokenOWL is Proxied, StandardToken {
     function burnOWL(address user, uint amount)
         public
     {
-        allowances[user][msg.sender] = allowances[user][msg.sender].sub(amount);
+        allowed[user][msg.sender] = allowed[user][msg.sender].sub(amount);
         balances[user] = balances[user].sub(amount);
-        totalTokens = totalTokens.sub(amount);
+        totalSupply_ = totalSupply_.sub(amount);
         emit Burnt(msg.sender, user, amount);
     }
 }

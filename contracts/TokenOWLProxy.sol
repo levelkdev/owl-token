@@ -1,10 +1,11 @@
 pragma solidity ^0.4.21;
 
-import "@gnosis.pm/util-contracts/contracts/StandardToken.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "@gnosis.pm/util-contracts/contracts/Proxy.sol";
 
 contract TokenOWLProxy is Proxy, StandardToken {
-    using Math for *;
+    using SafeMath for *;
 
     string public constant name = "OWL Token";
     string public constant symbol = "OWL";

@@ -1,10 +1,11 @@
 pragma solidity ^0.4.21;
 
 import "@gnosis.pm/gno-token/contracts/TokenGNO.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./TokenOWL.sol";
 
 contract OWLAirdrop {
-    using Math for *;
+    using SafeMath for *;
 
     TokenOWL public tokenOWL;
     TokenGNO public tokenGNO;

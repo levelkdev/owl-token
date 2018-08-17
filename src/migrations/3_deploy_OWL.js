@@ -1,27 +1,27 @@
 function migrate ({ artifacts, deployer, network, accounts, web3 }) {
   const TokenOWL = artifacts.require('TokenOWL')
   const TokenOWLProxy = artifacts.require('TokenOWLProxy')
-  const { Math } = _getDependencies(artifacts, network, deployer)
+  const { SafeMath } = _getDependencies(artifacts, network, deployer)
 
   return deployer
-    .then(() => Math.deployed())
-    .then(() => deployer.link(Math, [ TokenOWL, TokenOWLProxy ]))
+    .then(() => SafeMath.deployed())
+    .then(() => deployer.link(SafeMath, [ TokenOWL, TokenOWLProxy ]))
     .then(() => deployer.deploy(TokenOWL))
     .then(() => deployer.deploy(TokenOWLProxy, TokenOWL.address))
 }
 
 function _getDependencies (artifacts, network, deployer) {
-  let Math
+  let SafeMath
   if (network === 'development') {
-    Math = artifacts.require('Math')
+    SafeMath = artifacts.require('SafeMath')
   } else {
     const contract = require('truffle-contract')
-    Math = contract(require('@gnosis.pm/util-contracts/build/contracts/Math'))
-    Math.setProvider(deployer.provider)
+    SafeMath = contract(require('openzeppelin-solidity/contracts/math/SafeMath'))
+    SafeMath.setProvider(deployer.provider)
   }
 
   return {
-    Math
+    SafeMath
   }
 }
 

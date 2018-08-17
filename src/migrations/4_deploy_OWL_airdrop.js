@@ -11,14 +11,14 @@ function migrate ({
   const TokenOWL = artifacts.require('TokenOWL')
   const TokenOWLProxy = artifacts.require('TokenOWLProxy')
   const OWLAirdrop = artifacts.require('OWLAirdrop')
-  const { Math, TokenGNO } = _getDependencies(artifacts, network, deployer)
+  const { SafeMath, TokenGNO } = _getDependencies(artifacts, network, deployer)
 
   return deployer
-    .then(() => Math.deployed())
+    .then(() => SafeMath.deployed())
     .then(() => TokenGNO.deployed())
     .then(() => TokenOWL.deployed())
     .then(() => TokenOWLProxy.deployed())
-    .then(() => deployer.link(Math, [ OWLAirdrop ]))
+    .then(() => deployer.link(SafeMath, [ OWLAirdrop ]))
     .then(() => {
       const owlProxyAddress = TokenOWLProxy.address
       const gnoAddress = TokenGNO.address
@@ -43,20 +43,20 @@ function _getDefaultLockEndTime () {
 }
 
 function _getDependencies (artifacts, network, deployer) {
-  let Math, TokenGNO
+  let SafeMath, TokenGNO
   if (network === 'development') {
-    Math = artifacts.require('Math')
+    SafeMath = artifacts.require('SafeMath')
     TokenGNO = artifacts.require('TokenGNO')
   } else {
     const contract = require('truffle-contract')
-    Math = contract(require('@gnosis.pm/util-contracts/build/contracts/Math'))
-    Math.setProvider(deployer.provider)
+    SafeMath = contract(require('openzeppelin-solidity/contracts/math/SafeMath'))
+    SafeMath.setProvider(deployer.provider)
     TokenGNO = contract(require('@gnosis.pm/gno-token/build/contracts/TokenGNO'))
     TokenGNO.setProvider(deployer.provider)
   }
 
   return {
-    Math,
+    SafeMath,
     TokenGNO
   }
 }

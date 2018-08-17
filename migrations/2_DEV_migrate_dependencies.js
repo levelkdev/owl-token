@@ -1,7 +1,7 @@
 /* global artifacts, web3 */
 /* eslint no-undef: "error" */
 
-const deployMath = require('@gnosis.pm/util-contracts/src/migrations/2_deploy_math')
+const deploySafeMath = require('@gnosis.pm/util-contracts/src/migrations/2_deploy_safemath')
 const deployGno = require('@gnosis.pm/gno-token/src/migrations/3_deploy_GNO')
 
 module.exports = function (deployer, network, accounts) {
@@ -15,7 +15,7 @@ module.exports = function (deployer, network, accounts) {
       initialTokenAmount: process.env.DEV_GNO_TOKEN_AMOUNT
     }
     deployer
-      .then(() => deployMath(deployParams))
+      .then(() => deploySafeMath(deployParams))
       .then(() => deployGno(deployParams))
   } else {
     console.log('Not in development, so nothing to do. Current network is %s', network)
